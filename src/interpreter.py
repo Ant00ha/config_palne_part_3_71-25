@@ -32,9 +32,14 @@ class VM:
         chunk = self.program_memory[self.pc:self.pc + COMMAND_SIZE]
         val = struct.unpack("<Q", chunk)[0]
 
-        field_a = val & 0x7F
-        field_b = (val >> 7) & 0xFF
-        field_c = (val >> 12) & 0x1FFFFFF
+        
+        field_a = val & 0x7F  
+        
+        
+        field_b = (val >> 7) & 0x1F          
+        
+        
+        field_c = (val >> 12) & 0x1FFFFFF    
 
         self.pc += COMMAND_SIZE
         return field_a, field_b, field_c
@@ -48,21 +53,21 @@ class VM:
 
             opcode, field_b, field_c = cmd
 
-            if opcode == 5: 
+            if opcode == 5:  
                 self.stack.append(field_b)
-            elif opcode == 83: 
+            elif opcode == 83:  
                 addr = self.stack.pop()
                 val = self.data_memory[addr]
                 self.stack.append(val)
-            elif opcode == 78: 
+            elif opcode == 78:  
                 val = self.stack.pop()
                 addr = field_b
                 self.data_memory[addr] = val
-            elif opcode == 90: 
+            elif opcode == 90:  
                 base_addr = self.stack.pop()
                 addr = base_addr + field_b
                 val = self.data_memory[addr]
-                self.data_memory[field_c] = -val
+                self.data_memory[field_c] = -val 
             else:
                 raise ValueError(f"Неизвестный опкод: {opcode}")
 

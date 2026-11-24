@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<memory>
+  <cell address="5">10</cell>
+  <cell address="6">-10</cell>
+  <cell address="7">4</cell>
+  <cell address="8">-4</cell>
+</memory>

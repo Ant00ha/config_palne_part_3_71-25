@@ -1,0 +1,19 @@
+- op: "LOAD_CONST"
+  value: 42
+- op: "WRITE_MEM"
+  addr: 5
+
+- op: "LOAD_CONST"
+  value: 5
+- op: "UNARY_MINUS"
+  addr: 6
+
+- op: "LOAD_CONST"
+  value: 100
+- op: "WRITE_MEM"
+  addr: 7
+
+- op: "LOAD_CONST"
+  value: 7
+- op: "UNARY_MINUS"
+  addr: 8
