@@ -1,0 +1,69 @@
+- op: "LOAD_CONST"
+  value: 1
+- op: "WRITE_MEM"
+  addr: 100
+
+- op: "LOAD_CONST"
+  value: 2
+- op: "WRITE_MEM"
+  addr: 101
+
+- op: "LOAD_CONST"
+  value: 3
+- op: "WRITE_MEM"
+  addr: 102
+
+- op: "LOAD_CONST"
+  value: 4
+- op: "WRITE_MEM"
+  addr: 103
+
+- op: "LOAD_CONST"
+  value: 5
+- op: "WRITE_MEM"
+  addr: 104
+
+- op: "LOAD_CONST"
+  value: 6
+- op: "WRITE_MEM"
+  addr: 105
+
+- op: "LOAD_CONST"
+  value: 7
+- op: "WRITE_MEM"
+  addr: 106
+
+- op: "LOAD_CONST"
+  value: 100
+- op: "UNARY_MINUS"
+  addr: 100
+
+- op: "LOAD_CONST"
+  value: 101
+- op: "UNARY_MINUS"
+  addr: 101
+
+- op: "LOAD_CONST"
+  value: 102
+- op: "UNARY_MINUS"
+  addr: 102
+
+- op: "LOAD_CONST"
+  value: 103
+- op: "UNARY_MINUS"
+  addr: 103
+
+- op: "LOAD_CONST"
+  value: 104
+- op: "UNARY_MINUS"
+  addr: 104
+
+- op: "LOAD_CONST"
+  value: 105
+- op: "UNARY_MINUS"
+  addr: 105
+
+- op: "LOAD_CONST"
+  value: 106
+- op: "UNARY_MINUS"
+  addr: 106
