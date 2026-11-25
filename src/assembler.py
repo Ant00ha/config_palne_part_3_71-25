@@ -37,7 +37,7 @@ def translate_to_ir(yaml_data: List[dict]) -> List[Command]:
 
         opcode = OPCODES[op_name]
 
-        # По умолчанию B и C равны 0
+        
         field_b = 0
         field_c = 0
 
@@ -46,9 +46,9 @@ def translate_to_ir(yaml_data: List[dict]) -> List[Command]:
         elif op_name == "WRITE_MEM":
             field_b = item.get("addr", 0)
         elif op_name == "UNARY_MINUS":
-            field_b = item.get("offset", 0)  # Вот тут берем offset (B=13)
-            field_c = item.get("addr", 0)    # А тут адрес (C=145)
-        # Для READ_MEM поля B и C остаются 0, как в спецификации
+            field_b = item.get("offset", 0)  
+            field_c = item.get("addr", 0)    
+        
 
         cmd = Command(
             opcode=opcode,
@@ -83,7 +83,7 @@ def generate_machine_code(ir_program: List[Command]) -> bytes:
 def print_hex_dump(binary_data: bytes) -> None:
     """Вывод машинного кода в hex-формате (как в тестах)."""
     print(f"Размер двоичного файла: {len(binary_data)} байт")
-    # Выводим байты по 8 штук (на одну команду), как в спецификации
+    
     for i in range(0, len(binary_data), 8):
         chunk = binary_data[i:i+8]
         hex_str = ", ".join(f"0x{b:02X}" for b in chunk)
@@ -104,10 +104,10 @@ def main() -> None:
         yaml_data = parse_yaml(src_path)
         ir_program = translate_to_ir(yaml_data)
         
-        # Генерируем машинный код
+        
         binary_data = generate_machine_code(ir_program)
 
-        # Записываем в файл
+        
         with open(dst_path, "wb") as file:
             file.write(binary_data)
 

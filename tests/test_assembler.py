@@ -13,7 +13,7 @@ class TestAssembler(unittest.TestCase):
         data = [{"op": "LOAD_CONST", "value": 70}]
         ir = translate_to_ir(data)
         binary = generate_machine_code(ir)
-        # Спецификация: 0x05, 0x23, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        
         self.assertEqual(binary.hex(), "0523000000000000")
 
     def test_read_mem(self) -> None:
@@ -21,7 +21,7 @@ class TestAssembler(unittest.TestCase):
         data = [{"op": "READ_MEM"}]
         ir = translate_to_ir(data)
         binary = generate_machine_code(ir)
-        # Спецификация: 0x53, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        
         self.assertEqual(binary.hex(), "5300000000000000")
 
     def test_write_mem(self) -> None:
@@ -29,7 +29,7 @@ class TestAssembler(unittest.TestCase):
         data = [{"op": "WRITE_MEM", "addr": 215}]
         ir = translate_to_ir(data)
         binary = generate_machine_code(ir)
-        # Спецификация: 0xCE, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        
         self.assertEqual(binary.hex(), "ce6b000000000000")
 
     def test_unary_minus(self) -> None:
