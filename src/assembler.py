@@ -37,7 +37,6 @@ def translate_to_ir(yaml_data: List[dict]) -> List[Command]:
 
         opcode = OPCODES[op_name]
 
-        
         field_b = 0
         field_c = 0
 
@@ -46,9 +45,8 @@ def translate_to_ir(yaml_data: List[dict]) -> List[Command]:
         elif op_name == "WRITE_MEM":
             field_b = item.get("addr", 0)
         elif op_name == "UNARY_MINUS":
-            field_b = item.get("offset", 0)  
-            field_c = item.get("addr", 0)    
-        
+            field_b = item.get("offset", 0)
+            field_c = item.get("addr", 0)
 
         cmd = Command(
             opcode=opcode,
@@ -65,15 +63,11 @@ def generate_machine_code(ir_program: List[Command]) -> bytes:
     binary_data = bytearray()
 
     for cmd in ir_program:
-        
         val = 0
-       
         val |= (cmd.field_a & 0x7F) << 0
-       
         val |= (cmd.field_b & 0xFF) << 7
-        
         val |= (cmd.field_c & 0x1FFFFFF) << 12
-        
+
         packed_command = struct.pack("<Q", val)
         binary_data.extend(packed_command)
 
@@ -83,9 +77,8 @@ def generate_machine_code(ir_program: List[Command]) -> bytes:
 def print_hex_dump(binary_data: bytes) -> None:
     """Вывод машинного кода в hex-формате (как в тестах)."""
     print(f"Размер двоичного файла: {len(binary_data)} байт")
-    
-    for i in range(0, len(binary_data), 8):
-        chunk = binary_data[i:i+8]
+    for i in range(0, len(binary_data), COMMAND_SIZE):
+        chunk = binary_data[i:i + COMMAND_SIZE]
         hex_str = ", ".join(f"0x{b:02X}" for b in chunk)
         print(hex_str)
 
@@ -93,7 +86,8 @@ def print_hex_dump(binary_data: bytes) -> None:
 def main() -> None:
     """Точка входа CLI ассемблера."""
     if len(sys.argv) < 3:
-        print("Использование: python -m src.assembler <src.yaml> <dst.bin> [--test]")
+        print("Использование: python -m src.assembler <src.yaml> <dst.bin>")
+        print("Дополнительно: --test для вывода hex-дампа")
         sys.exit(1)
 
     src_path = sys.argv[1]
@@ -103,11 +97,8 @@ def main() -> None:
     try:
         yaml_data = parse_yaml(src_path)
         ir_program = translate_to_ir(yaml_data)
-        
-        
         binary_data = generate_machine_code(ir_program)
 
-        
         with open(dst_path, "wb") as file:
             file.write(binary_data)
 
@@ -115,8 +106,7 @@ def main() -> None:
             print(f"--- Успешно скомпилировано: {src_path} ---")
             print_hex_dump(binary_data)
         else:
-            print(f"Успешно скомпилировано {len(ir_program)} команд. Файл {dst_path} создан.")
-
+            print(f"Успешно скомпилировано {len(ir_program)} команд.")
     except Exception as error:
         print(f"Ошибка: {error}")
         sys.exit(1)

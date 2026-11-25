@@ -2,11 +2,16 @@
 
 import sys
 import struct
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as et
 from typing import List
 
 COMMAND_SIZE = 8
 MEMORY_SIZE = 1024
+
+OP_LOAD_CONST = 5
+OP_READ_MEM = 83
+OP_WRITE_MEM = 78
+OP_UNARY_MINUS = 90
 
 
 class VM:
@@ -32,14 +37,9 @@ class VM:
         chunk = self.program_memory[self.pc:self.pc + COMMAND_SIZE]
         val = struct.unpack("<Q", chunk)[0]
 
-        
-        field_a = val & 0x7F  
-        
-        
-        field_b = (val >> 7) & 0x1F          
-        
-        
-        field_c = (val >> 12) & 0x1FFFFFF    
+        field_a = val & 0x7F
+        field_b = (val >> 7) & 0x1F
+        field_c = (val >> 12) & 0x1FFFFFF
 
         self.pc += COMMAND_SIZE
         return field_a, field_b, field_c
@@ -53,35 +53,35 @@ class VM:
 
             opcode, field_b, field_c = cmd
 
-            if opcode == 5:  
+            if opcode == OP_LOAD_CONST:
                 self.stack.append(field_b)
-            elif opcode == 83:  
+            elif opcode == OP_READ_MEM:
                 addr = self.stack.pop()
                 val = self.data_memory[addr]
                 self.stack.append(val)
-            elif opcode == 78:  
+            elif opcode == OP_WRITE_MEM:
                 val = self.stack.pop()
                 addr = field_b
                 self.data_memory[addr] = val
-            elif opcode == 90:  
+            elif opcode == OP_UNARY_MINUS:
                 base_addr = self.stack.pop()
                 addr = base_addr + field_b
                 val = self.data_memory[addr]
-                self.data_memory[field_c] = -val 
+                self.data_memory[field_c] = -val
             else:
                 raise ValueError(f"Неизвестный опкод: {opcode}")
 
-    def dump_memory(self, filepath: str, start_addr: int, end_addr: int) -> None:
+    def dump_memory(self, filepath: str, start: int, end: int) -> None:
         """Сохранение дампа памяти в XML."""
-        root = ET.Element("memory")
-        for addr in range(start_addr, end_addr + 1):
+        root = et.Element("memory")
+        for addr in range(start, end + 1):
             if addr < len(self.data_memory):
-                cell = ET.SubElement(root, "cell")
+                cell = et.SubElement(root, "cell")
                 cell.set("address", str(addr))
                 cell.text = str(self.data_memory[addr])
         
-        tree = ET.ElementTree(root)
-        ET.indent(tree, space="  ")
+        tree = et.ElementTree(root)
+        et.indent(tree, space="  ")
         tree.write(filepath, encoding="utf-8", xml_declaration=True)
 
 
